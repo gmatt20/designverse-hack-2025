@@ -69,10 +69,20 @@ def forecastTemp():
 @app.get("/get-global-temp")
 def temp():
   url = "https://global-warming.org/api/temperature-api"
+  info = requests.get(url).json()
 
-  globalTemp = requests.get(url).json()
+  data = info["result"] 
+  temp_1800s = [entry for entry in data if entry["time"].startswith("18")]
+  temp_1900s = [entry for entry in data if entry["time"].startswith("19")]
+  temp_2000s = [entry for entry in data if entry["time"].startswith("20")]
+  temp_2025s = [entry for entry in data if entry["time"].startswith("2025")]
 
-  return {"sea temp": globalTemp}
+  return {
+        "1800s": temp_1800s[0],
+        "1900s": temp_1900s[0],
+        "2000s": temp_2000s[0],
+        "2025": temp_2025s[0]
+    }
 
 @app.get("/get-carbon-dioxide")
 def temp():
