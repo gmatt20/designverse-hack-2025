@@ -23,6 +23,22 @@ def seaLevel():
 
   return {"info": sea_level_data}
 
+@app.get("/get-sea-temp")
+def seaTemperature():
+  url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=sea_surface_temperature"
+  info = requests.get(url).json()
+
+  # Extract and zip the data
+  times = info["hourly"]["time"]
+  sea_surface_temperature = info["hourly"]["sea_surface_temperature"]
+
+  sea_surface_temperaturedata = [
+      {"datetime": t, "sea_surface_temperature": s}
+      for t, s in zip(times, sea_surface_temperature)
+  ]
+
+  return {"info": sea_surface_temperaturedata}
+
 @app.get("/get-sea-current")
 def seaCurrentVelocity():
   url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=ocean_current_velocity"
