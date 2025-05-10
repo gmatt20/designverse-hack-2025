@@ -8,7 +8,7 @@ def root():
   return {"message": "Hello world! You have reached the root."}
 
 @app.get("/get-sea-level")
-def info():
+def seaLevel():
   url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=sea_level_height_msl"
   info = requests.get(url).json()
 
@@ -24,7 +24,7 @@ def info():
   return {"info": sea_level_data}
 
 @app.get("/get-sea-temp")
-def temp():
+def seaTemp():
   url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=sea_surface_temperature"
 
   temp = requests.get(url).json()
@@ -32,14 +32,14 @@ def temp():
   return {"sea temp": temp}
 
 @app.get("/get-sea-current")
-def temp():
+def seaCurrentVelocity():
   url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=ocean_current_velocity"
   info = requests.get(url).json()
   times = info["hourly"]["time"]
-  ocean_curent_velocity = info["hourly"]["ocean_curent_velocity"]
+  ocean_curent_velocity = info["hourly"]["ocean_current_velocity"]
 
   ocean_curent_velocity = [
-      {"datetime": t, "ocean_curent_velocity": s}
+      {"datetime": t, "ocean_current_velocity": s}
       for t, s in zip(times, ocean_curent_velocity)
   ]
 
@@ -48,10 +48,15 @@ def temp():
 @app.get("/get-sea-wave-height")
 def temp():
   url = "https://marine-api.open-meteo.com/v1/marine?latitude=34.052235&longitude=124.5085&hourly=wave_height"
+  times = info["hourly"]["time"]
+  ocean_curent_velocity = info["hourly"]["ocean_current_velocity"]
 
-  seaWaveHeight = requests.get(url).json()
+  ocean_curent_velocity = [
+      {"datetime": t, "ocean_current_velocity": s}
+      for t, s in zip(times, ocean_curent_velocity)
+  ]
 
-  return {"sea temp": seaWaveHeight}
+  return {"sea current velocity": ocean_curent_velocity}
 
 @app.get("/get-climate-temp")
 def temp():
