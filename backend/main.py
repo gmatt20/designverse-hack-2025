@@ -140,21 +140,36 @@ def temp():
 
   info = requests.get(url).json()
 
-  data = info["arcticData"] 
-  arctic1980s = [entry for entry in data if entry["date"].startswith("2002")]
-  nitrousOxide2015s = [entry for entry in data if entry["date"].startswith("2015")]
-  nitrousOxide2025s = [entry for entry in data if entry["date"].startswith("2025")]
+  data = info["data"] 
+  arctic1980s = [entry for entry in data if entry["date"].startswith("19")]
+  arctic2000s = [entry for entry in data if entry["date"].startswith("20")]
+  arctic2015s = [entry for entry in data if entry["date"].startswith("2015")]
+  arctic2025s = [entry for entry in data if entry["date"].startswith("2025")]
 
   return {
-        "2002s": nitrousOxide2002s[0],
-        "2015s": nitrousOxide2015s[0],
-        "2025s": nitrousOxide2025s[0],
+        "1980s": arctic1980s[0],
+        "2000s": arctic2000s[0],
+        "2015s": arctic2015s[0],
+        "2015s": arctic2025s[0],
     }
 
 @app.get("/get-ocean-warming")
-def temp():
+def oceanWarming():
   url = "https://global-warming.org/api/ocean-warming-api"
 
-  globalTemp = requests.get(url).json()
+  info = requests.get(url).json()
 
-  return {"sea temp": globalTemp}
+  data = info["result"] 
+  warming_1800s = {year: data[year] for year in data if year.startswith("18")}
+  warming_1900s = {year: data[year] for year in data if year.startswith("19")}
+  warming_2000s = {year: data[year] for year in data if year.startswith("20")}
+
+  first_1800s = sorted(warming_1800s.items())[0]
+  first_1900s = sorted(warming_1900s.items())[0]
+  first_2000s = sorted(warming_2000s.items())[0]
+
+  return {
+        "1800s": {first_1800s[0]: first_1800s[1]},
+        "1900s": {first_1900s[0]: first_1900s[1]},
+        "2000s": {first_2000s[0]: first_2000s[1]},
+    }
