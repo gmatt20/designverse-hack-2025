@@ -67,7 +67,7 @@ def forecastTemp():
   return {"temperature": temp}
 
 @app.get("/get-global-temp")
-def temp():
+def globalTemp():
   url = "https://global-warming.org/api/temperature-api"
   info = requests.get(url).json()
 
@@ -85,20 +85,37 @@ def temp():
     }
 
 @app.get("/get-carbon-dioxide")
-def temp():
+def co2():
   url = "https://global-warming.org/api/co2-api"
+  info = requests.get(url).json()
 
-  globalTemp = requests.get(url).json()
+  data = info["co2"] 
+  co2015s = [entry for entry in data if entry["year"].startswith("2015")]
+  co2025s = [entry for entry in data if entry["year"].startswith("2025")]
 
-  return {"sea temp": globalTemp}
+  return {
+        "2015s": co2015s[0],
+        "2025s": co2025s[0],
+    }
 
 @app.get("/get-methane")
-def temp():
+def methane():
   url = "https://global-warming.org/api/methane-api"
 
-  globalTemp = requests.get(url).json()
+  info = requests.get(url).json()
 
-  return {"sea temp": globalTemp}
+  data = info["methane"] 
+  methane1984s = [entry for entry in data if entry["date"].startswith("1984")]
+  methane2000s = [entry for entry in data if entry["date"].startswith("2000")]
+  methane2015s = [entry for entry in data if entry["date"].startswith("2015")]
+  methane2025s = [entry for entry in data if entry["date"].startswith("2025")]
+
+  return {
+        "1984s": methane1984s[0],
+        "200s": methane2000s[0],
+        "2015s": methane2015s[0],
+        "2025s": methane2025s[0],
+    }
 
 @app.get("/get-nitrous-oxide")
 def temp():
