@@ -118,20 +118,38 @@ def methane():
     }
 
 @app.get("/get-nitrous-oxide")
-def temp():
+def nitrousOxide():
   url = "https://global-warming.org/api/nitrous-oxide-api"
 
-  globalTemp = requests.get(url).json()
+  info = requests.get(url).json()
 
-  return {"sea temp": globalTemp}
+  data = info["nitrous"] 
+  nitrousOxide2002s = [entry for entry in data if entry["date"].startswith("2002")]
+  nitrousOxide2015s = [entry for entry in data if entry["date"].startswith("2015")]
+  nitrousOxide2025s = [entry for entry in data if entry["date"].startswith("2025")]
+
+  return {
+        "2002s": nitrousOxide2002s[0],
+        "2015s": nitrousOxide2015s[0],
+        "2025s": nitrousOxide2025s[0],
+    }
 
 @app.get("/get-polar-ice")
 def temp():
   url = "https://global-warming.org/api/arctic-api"
 
-  globalTemp = requests.get(url).json()
+  info = requests.get(url).json()
 
-  return {"sea temp": globalTemp}
+  data = info["arcticData"] 
+  arctic1980s = [entry for entry in data if entry["date"].startswith("2002")]
+  nitrousOxide2015s = [entry for entry in data if entry["date"].startswith("2015")]
+  nitrousOxide2025s = [entry for entry in data if entry["date"].startswith("2025")]
+
+  return {
+        "2002s": nitrousOxide2002s[0],
+        "2015s": nitrousOxide2015s[0],
+        "2025s": nitrousOxide2025s[0],
+    }
 
 @app.get("/get-ocean-warming")
 def temp():
